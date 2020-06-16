@@ -1,0 +1,71 @@
+linters-settings:
+  dupl:
+    threshold: 100
+  gocritic:
+    # Enable multiple checks by tags, run `GL_DEBUG=gocritic golangci-lint` run to see all tags and checks.
+    # Empty list by default. See https://github.com/go-critic/go-critic#usage -> section "Tags".
+    enabled-tags:
+      - performance
+      - diagnostic
+      - style
+    disabled-checks:
+      - emptyStringTest
+  gocyclo:
+    min-complexity: 15
+  golint:
+    min-confidence: 0
+  govet:
+    check-shadowing: true
+  goconst:
+    min-len: 2
+    min-occurrences: 3
+  goimports:
+    local-prefixes: github.com/matoous/linkfix
+  lll:
+    line-length: 140
+  maligned:
+    suggest-new: true
+  misspell:
+    locale: US
+
+linters:
+  enable-all: true
+  disable:
+    # prealloc is not recommended by `golangci-lint` developers.
+    - prealloc
+    - gochecknoglobals
+    - wsl
+    # gomnd checks magic numbers which is any number in code, that is not first defined with some name
+    - gomnd
+    # This makes sense for packages and libraries but many of our dynamic errors are just for us to log if things
+    # go tits up. So when it comes to error: use common sense.
+    - goerr113
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - goconst
+        - dupl
+        - bodyclose
+        - depguard
+        - gomnd
+
+    - linters:
+        - lll
+      source: "https://[^ ]{100,}"
+
+run:
+  modules-download-mode: readonly
+  timeout: 5m
+
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
+  format: tab
+
+  # print lines of code with issue, default is true
+  print-issued-lines: true
+
+  # print linter name in the end of issue text, default is true
+  print-linter-name: true

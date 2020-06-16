@@ -1,0 +1,7 @@
+What the hell is going on: https://dzx.cz
+Here's bad url dzx.cz
+Does one doesn't work at all: https://zsh.sourceforge.net/Intro/intro_toc.html
+And here's no url
+This was if 404: https://carterandevans.com/portal/images/pdf/article70.pdf
+mailto:test@gmail.com
+ftp://localhost:1111/

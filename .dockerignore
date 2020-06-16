@@ -1,0 +1,11 @@
+.dockerignore
+.git/
+.gitignore
+.idea/
+README.md
+
+# We don't need dockerfiles inside containers
+Dockerfile
+Dockerfile.*
+
+tests/
