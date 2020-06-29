@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/bmatcuk/doublestar"
+	"golang.org/x/tools/godoc/util"
 	"mvdan.cc/xurls/v2"
 
 	"github.com/matoous/linkfix/models"
@@ -63,6 +64,10 @@ func (fl *FilesystemSource) linksFromFile(f string) ([]models.Link, error) {
 	if err != nil {
 		return nil, err
 	}
+	// This prevents running the regexp on for example large images and other files, that most likely won't contain URL.
+	if !util.IsText(data) {
+		return nil, nil
+	}
 	var links []models.Link
 	// go through the file line by line so we can annotate the links with line and column
 	for n, line := range strings.Split(string(data), "\n") {
@@ -82,15 +87,6 @@ func (fl *FilesystemSource) linksFromFile(f string) ([]models.Link, error) {
 		}
 	}
 	return links, nil
-}
-
-func filter(ss []string, test func(string) bool) (ret []string) {
-	for _, s := range ss {
-		if test(s) {
-			ret = append(ret, s)
-		}
-	}
-	return
 }
 
 // listFiles lists all files under given path.

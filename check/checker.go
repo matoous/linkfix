@@ -1,9 +1,9 @@
 package check
 
 import (
+	"context"
 	"fmt"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -32,29 +32,31 @@ func NewChecker(exclude []string) *Checker {
 	}
 }
 
-// ProcessUrl processes given URL, checking whether it works and in case it doesn't finding its snapshot
+// ProcessURL processes given URL, checking whether it works and in case it doesn't finding its snapshot
 // on Wayback machine.
-func (c *Checker) ProcessUrl(link models.Link) (models.Fix, error) {
+func (c *Checker) ProcessURL(ctx context.Context, link models.Link) (models.Fix, error) {
 	fix := models.Fix{Link: link}
-	if !c.shouldCheck(link.URL) {
+	if !c.shouldCheck(link.URL.String()) {
 		return fix, nil
 	}
 	switch link.URL.Scheme {
 	case "http", "https":
-		return HTTP(link)
+		return HTTP(ctx, link)
 	case "mailto":
 		return MailTo(link)
 	case "ftp":
 		return FTP(link)
+	case "file":
+		return File(link)
 	default:
 		return models.Fix{}, fmt.Errorf("unknown URL schema: %s", link.URL.Scheme)
 	}
 }
 
 // shouldCheck returns true if the url should be checked, false otherwise. This is determined based on excluded urls.
-func (c *Checker) shouldCheck(uri *url.URL) bool {
+func (c *Checker) shouldCheck(url string) bool {
 	for _, e := range c.exclude {
-		if strings.Contains(uri.String(), e) {
+		if strings.Contains(url, e) {
 			return false
 		}
 	}

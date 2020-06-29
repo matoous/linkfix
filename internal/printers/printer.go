@@ -1,7 +1,7 @@
 package printers
 
 import (
-    "github.com/matoous/linkfix/models"
+	"github.com/matoous/linkfix/models"
 )
 
 type Printer interface {

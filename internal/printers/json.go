@@ -5,21 +5,21 @@ import (
 	"fmt"
 
 	"github.com/matoous/linkfix/internal/log"
-    "github.com/matoous/linkfix/models"
+	"github.com/matoous/linkfix/models"
 )
 
-type JSON struct {
+type jsoner struct {
 }
 
-func NewJSON() *JSON {
-	return &JSON{}
+func NewJSON() *jsoner {
+	return &jsoner{}
 }
 
 type JSONResult struct {
 	Issues []models.Fix `json:"issues"`
 }
 
-func (p JSON) PrintAll(issues []models.Fix) error {
+func (p jsoner) PrintAll(issues []models.Fix) error {
 	res := JSONResult{
 		Issues: issues,
 	}
@@ -33,7 +33,7 @@ func (p JSON) PrintAll(issues []models.Fix) error {
 	return err
 }
 
-func (p JSON) Print(issue models.Fix) error {
+func (p jsoner) Print(issue models.Fix) error {
 	outputJSON, err := json.Marshal(&issue)
 	if err != nil {
 		return err
